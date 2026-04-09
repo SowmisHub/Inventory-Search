@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { PageTitle, Card, Spinner, EmptyState } from "../components/ui";
 
+const BASE_URL = "https://inventory-search-lx2h.onrender.com"; // 🔥 CHANGE THIS
+
 export default function GroupedPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/inventory/grouped")
+    fetch(`${BASE_URL}/inventory/grouped`)
       .then(res => res.json())
       .then(d => {
-        setData(d);
+        setData(Array.isArray(d) ? d : []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setData([]);
         setLoading(false);
       });
   }, []);
