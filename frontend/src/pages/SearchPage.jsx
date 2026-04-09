@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import {
-  PageTitle, Card, Input, Select, Button,
+  PageTitle, Card, Input, Button,
   Spinner, Tag, EmptyState, Alert
 } from "../components/ui";
 
@@ -10,9 +10,10 @@ const Grid = styled.div`
   gap: 10px;
 `;
 
+const BASE_URL = "https://your-backend-url.onrender.com"; // 🔥 CHANGE THIS
+
 export default function SearchPage() {
   const [q, setQ] = useState("");
-  const [category, setCategory] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [results, setResults] = useState([]);
@@ -31,15 +32,15 @@ export default function SearchPage() {
     try {
       const params = new URLSearchParams();
       if (q) params.append("q", q);
-      if (category) params.append("category", category);
       if (minPrice) params.append("minPrice", minPrice);
       if (maxPrice) params.append("maxPrice", maxPrice);
 
-      const res = await fetch(`/search?${params}`);
+      const res = await fetch(`${BASE_URL}/search?${params}`);
       const data = await res.json();
 
-      setResults(data.results || []);
-    } catch {
+      // ✅ FIX HERE
+      setResults(Array.isArray(data) ? data : []);
+    } catch (err) {
       setError("Search failed");
     }
 
@@ -57,9 +58,25 @@ export default function SearchPage() {
       </PageTitle>
 
       <Card>
-        <Input placeholder="Search..." value={q} onChange={e => setQ(e.target.value)} />
-        <Input type="number" placeholder="Min Price" value={minPrice} onChange={e => setMinPrice(e.target.value)} />
-        <Input type="number" placeholder="Max Price" value={maxPrice} onChange={e => setMaxPrice(e.target.value)} />
+        <Input
+          placeholder="Search..."
+          value={q}
+          onChange={e => setQ(e.target.value)}
+        />
+
+        <Input
+          type="number"
+          placeholder="Min Price"
+          value={minPrice}
+          onChange={e => setMinPrice(e.target.value)}
+        />
+
+        <Input
+          type="number"
+          placeholder="Max Price"
+          value={maxPrice}
+          onChange={e => setMaxPrice(e.target.value)}
+        />
 
         <Button onClick={search}>Search</Button>
 
