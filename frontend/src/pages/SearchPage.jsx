@@ -10,7 +10,7 @@ const Grid = styled.div`
   gap: 10px;
 `;
 
-const BASE_URL = "https://your-backend-url.onrender.com"; // 🔥 CHANGE THIS
+const BASE_URL = "https://inventory-search-lx2h.onrender.com"; // 🔥 CHANGE THIS
 
 export default function SearchPage() {
   const [q, setQ] = useState("");
